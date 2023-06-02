@@ -46,13 +46,14 @@ def show_vid():
     cap1 = cv2.VideoCapture(0)
     if not cap1.isOpened():
         print("cant open the camera1")
-
-    flag1, frame1 = cap1.read()
-    frame1 = cv2.resize(frame1,(600,500))
-    bounding_box = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    gray_frame = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
-    num_faces = bounding_box.detectMultiScale(gray_frame,scaleFactor=1.3, minNeighbors=5)
-
+    while True:
+        flag1, frame1 = cap1.read()
+        frame1 = cv2.resize(frame1,(600,500))
+        bounding_box = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+        gray_frame = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
+        num_faces = bounding_box.detectMultiScale(gray_frame,scaleFactor=1.3, minNeighbors=5)
+        if len(num_faces) > 0:
+            break
     for (x, y, w, h) in num_faces:
         cv2.rectangle(frame1, (x, y-50), (x+w, y+h+10), (255, 0, 0), 2)
         roi_gray_frame = gray_frame[y:y + h, x:x + w]
