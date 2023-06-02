@@ -62,14 +62,16 @@ class karl( Frame ):
     def new_window(self):
         vid = cv2.VideoCapture(0)
         if not vid.isOpened():
-            print("cant open the camera1")
-        ret, frame1 = vid.read()
-        frame1 = cv2.resize(frame1,(300,250))
-        cv2.waitKey(50)
-
-        bounding_box = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-        gray_frame = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
-        num_faces = bounding_box.detectMultiScale(gray_frame,scaleFactor=1.3, minNeighbors=5)
+            print("cant open the camera")
+        while True:
+            ret, frame1 = vid.read()
+            frame1 = cv2.resize(frame1,(300,250))
+            bounding_box = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+            gray_frame = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
+            num_faces = bounding_box.detectMultiScale(gray_frame,scaleFactor=1.3, minNeighbors=5)
+            #detectMultiScale function must return detected object otherwise emotion will not be detected
+            if len(num_faces) > 0:
+                break
 
         for (x, y, w, h) in num_faces:
             cv2.rectangle(frame1, (x, y-50), (x+w, y+h+10), (255, 0, 0), 2)
