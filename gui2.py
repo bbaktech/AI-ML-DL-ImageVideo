@@ -28,6 +28,7 @@ emotion_model.add(Flatten())
 emotion_model.add(Dense(1024, activation='relu'))
 emotion_model.add(Dropout(0.5))
 emotion_model.add(Dense(7, activation='softmax'))
+
 emotion_model.load_weights('emotion_model.h5')
 
 cv2.ocl.setUseOpenCL(False)
@@ -56,22 +57,23 @@ class karl( Frame ):
         img1 = ImageTk.PhotoImage(Image.open("./emojis/angry.png"))
         self.vcapture2 = Label(self, image = img1)
         self.vcapture2.grid( row = 2, column = 1, columnspan = 2, sticky = W+E+N+S )
-        self.vcapture3 = Label(self,text = "")
+        self.vcapture3 = Label(self,text = "xxx")
         self.vcapture3.grid( row = 3, column = 1, columnspan = 2, sticky = W+E+N+S )
 
     def new_window(self):
         vid = cv2.VideoCapture(0)
         if not vid.isOpened():
-            print("cant open the camera")
+            print("cant open the camera1")
+
         while True:
             ret, frame1 = vid.read()
             frame1 = cv2.resize(frame1,(300,250))
             bounding_box = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
             gray_frame = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
             num_faces = bounding_box.detectMultiScale(gray_frame,scaleFactor=1.3, minNeighbors=5)
-            #detectMultiScale function must return detected object otherwise emotion will not be detected
-            if len(num_faces) > 0:
+            if len(num_faces)  >0 :
                 break
+        #detectMultiScale function must return detected object otherwise emotion will not be detected
 
         for (x, y, w, h) in num_faces:
             cv2.rectangle(frame1, (x, y-50), (x+w, y+h+10), (255, 0, 0), 2)
